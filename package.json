@@ -1,0 +1,32 @@
+{
+  "name": "_db",
+  "version": "1.0.0",
+  "description": "lodash document store",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp mocha"
+  },
+  "keywords": [
+    "db",
+    "lodash",
+    "javascript"
+  ],
+  "author": "Ryan Lindgren",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^2.0.0",
+    "chai-as-promised": "^4.2.0",
+    "coffee": "^1.0.0",
+    "coffee-script": "^1.9.1",
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-mocha": "^2.0.0",
+    "gulp-util": "^3.0.3",
+    "mocha": "^2.1.0"
+  },
+  "dependencies": {
+    "gulp-coffee": "^2.3.1",
+    "lodash": "^3.3.0",
+    "q": "^1.2.0"
+  }
+}
