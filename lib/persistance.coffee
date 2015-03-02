@@ -59,10 +59,10 @@ class Persistance
 
 	updateDocs: (newDocs, oldDocs) ->
 		contents = @db.storage.readFile @db.filename
-		_.each oldDocs, (d, i) ->
-			newContents = contents.replace JSON.stringify(d), (match, offset, _contents) ->
-				if _contents then return JSON.stringify(newDocs[i])
-			if newContents is contents then newContents += NEWLINE + JSON.stringify(newDocs[i])
+		_.each newDocs, (d, i) ->
+			newContents = contents.replace JSON.stringify(oldDocs[i]), (match, offset, _contents) ->
+				if _contents then return JSON.stringify(d)
+			if newContents is contents then newContents += NEWLINE + JSON.stringify(d)
 			contents = newContents
 		@db.storage.writeFile @db.filename, contents
 

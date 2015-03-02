@@ -11,7 +11,7 @@ var DELIMITER = "--";
 var PRIMARYKEY = "Id";
 
 var filePath = './test/helpers/persistanceData.txt';
-var contents = '{ "$$primaryKey" : "'+PRIMARYKEY+'"}'+NEWLINE+DELIMITER
+var contents = '{"$$primaryKey" : "'+PRIMARYKEY+'"}'+NEWLINE+DELIMITER
 
 _.range(100).forEach(function (i) {
 	var res = {
