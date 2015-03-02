@@ -3,4 +3,4 @@ class Executor
 
 	close: ->
 
-module.exports = Executor
+@Executor = Executor

@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mocha Test Runner</title>
+    <link rel="stylesheet" href="../../node_modules/mocha/mocha.css">
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <!-- test libs -->
+    <script src="../../node_modules/mocha/mocha.js"></script> 
+    <script src="../../node_modules/chai/chai.js"></script> 
+    <script src="../../node_modules/sinon/pkg/sinon-1.12.1.js"></script> 
+    <script>
+      mocha.setup('bdd');
+      var expect = chai.expect
+    </script>
+
+    <!-- vendor libs -->
+    <script src="../../node_modules/chance/chance.js"></script>
+    <script src="../../node_modules/lazy.js/lazy.js"></script> 
+    <script src="../../node_modules/lodash/index.js"></script> 
+    <script src="../../node_modules/q/q.js"></script> 
+
+    <!-- src files -->
+    <script src="../lib/storage.js"></script>
+    <script src="../lib/persistance.js"></script>
+    <script src="../lib/cursor.js"></script> 
+    <script src="../lib/datastore.js"></script> 
+    <script src="../lib/executor.js"></script> 
+    <script src="../lib/query.js"></script> 
+
+
+    <!-- test specs -->
+    <script src="persistance.js"></script> 
+    <script>
+      if (window.mochaPhantomJS) {
+        mochaPhantomJS.run();
+      } else {
+        mocha.run();
+      }
+    </script> 
+  </body>
+</html>

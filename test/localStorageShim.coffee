@@ -1,7 +1,6 @@
 Storage = require './helpers/localStorageShim'
-expect = chai.expect
 
-describe 'Storage', ->
+xdescribe 'Storage', ->
 	localStorage = null
 	
 	beforeEach ->

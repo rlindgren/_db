@@ -1,4 +1,3 @@
-_ = require 'lodash'
 
 class Persistance
 	DELIMITER = "--"
@@ -10,27 +9,34 @@ class Persistance
 	loadDatabase: () ->
 		if not @db.inMemoryOnly
 			buffer = @db.storage.readFile @db.filename
-			@db._ = if buffer then JSON.parse(@bufferToJson(buffer)) else @_
+			JSONBUFFER = @bufferToJson(buffer) if buffer
+			# console.log(JSONBUFFER)
+			@db._ = if buffer then JSON.parse(JSONBUFFER) else @db._
+			if not buffer then @initDatabase()
 			if @db._.$$primaryKey is not @db.primaryKey then return @initDatabase()
 			@db._.$$indexed = _.indexBy(@db._.$$data, @db.primaryKey) if buffer
 			@db.loaded = true
+		else
+			initDatabase()
 
 	initDatabase: () ->
-		@db.storage.writeFile @db.filename, @initBuffer(@db._)
+		@db.storage.writeFile(@db.filename, @initBuffer(@db._)) if not @db.inMemoryOnly
 
 	bufferToJson: (buffer) ->
 		res = '{"$$primaryKey":"PRIMARYKEY", "$$data":DATA}'
-		configIndex = buffer.indexOf(NEWLINE+DELIMITER+NEWLINE)
-		config = buffer.slice(0, configIndex)
-		res = res.replace("PRIMARYKEY", config.match(/primaryKey\:\s*(.*)/)[1])
-		res = res.replace("DATA", "[" + buffer.slice(configIndex + 4).replace(NEWLINE_RE, ",") + "]")
+		configIndex = buffer.indexOf(DELIMITER) - 1
+		configBuffer = buffer.slice(0, configIndex)
+		dataBuffer = buffer.slice(configIndex + 4)
+		config = JSON.parse configBuffer
+		res = res.replace("PRIMARYKEY", config.$$primaryKey)
+		res = res.replace("DATA", "[" + dataBuffer.replace(NEWLINE_RE, ",") + "]")
 		res
 
 	initBuffer: (config) ->
 		contents = ''
-		# we will replace repeating newline chars
-		contents += '$$primaryKey: "' + config.$$primaryKey + '"' + NEWLINE+DELIMITER+NEWLINE
-		_.each config.$$data, (d) -> contents += JSON.stringify(d) + NEWLINE
+		# we will replace repeating newline chars, hence the DELIMITER
+		contents += '{"$$primaryKey": "' + config.$$primaryKey + '"}' + NEWLINE+DELIMITER
+		_.each config.$$data, (d) -> contents += NEWLINE + JSON.stringify(d)
 		contents
 
 	insertDoc: (doc) ->
@@ -47,7 +53,7 @@ class Persistance
 		contents = @db.storage.readFile @db.filename
 		newContents = contents.replace JSON.stringify(oldDoc), (match, offset, _contents) ->
 			if _contents then return JSON.stringify(newDoc)
-		if newContents is contents then newContents += JSON.stringify(newDocs[i]) + NEWLINE
+		if newContents is contents then newContents += NEWLINE + JSON.stringify(newDoc)
 		contents = newContents
 		@db.storage.writeFile @db.filename, contents
 
@@ -56,7 +62,7 @@ class Persistance
 		_.each oldDocs, (d, i) ->
 			newContents = contents.replace JSON.stringify(d), (match, offset, _contents) ->
 				if _contents then return JSON.stringify(newDocs[i])
-			if newContents is contents then newContents += JSON.stringify(newDocs[i]) + NEWLINE
+			if newContents is contents then newContents += NEWLINE + JSON.stringify(newDocs[i])
 			contents = newContents
 		@db.storage.writeFile @db.filename, contents
 
@@ -72,4 +78,4 @@ class Persistance
 		contents = contents.replace(REPEATED_NEWLINES_RE, NEWLINE)
 		@db.storage.writeFile @db.filename, contents
 
-module.exports = Persistance
+@Persistance = Persistance

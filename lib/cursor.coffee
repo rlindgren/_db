@@ -1,6 +1,3 @@
-Lazy = require 'Lazy'
-_ = require 'lodash'
-
 class Cursor extends _
 	constructor: (@db) ->
 		# return Lazy Seq
